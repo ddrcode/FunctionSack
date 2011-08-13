@@ -1,0 +1,112 @@
+/*
+ *  FunctionSack v 0.5.0
+ *
+ *  Copyright (C) 2011 David de Rosier
+ *
+ *  Licensed under the MIT license.
+ *  http://www.opensource.org/licenses/mit-license.php
+ */
+
+
+/**
+ * @fileOverview
+ * FunctionSack is a generic-purpose JavaScript library which provides a wide
+ * number of functions for browser and server-side developers.
+ * It can be loaded via script tag in a HTML page, using require function
+ * of CommonJS-compliant engines and with load function of Rhino or 
+ * SpiderMonkey. 
+ *
+ * @author David de Rosier
+ * @version 0.5.0
+ */
+ 
+ 
+/**
+ * @name %(namespace)s 
+ * @namespace
+ * @static
+ */
+(function(__global, undefined){
+
+    "use strict";
+    
+    /**
+     * Private utils. Set of common functions used by all modules
+     * @private
+     * @static
+     */
+    var __utils = {
+    
+        mixin: function(dst,src1) {
+            var src, prop;
+            for(var srcId=1, len=arguments.length; srcId < len; ++srcId) {
+                for(prop in (src=arguments[srcId])) { if( src.hasOwnProperty(prop) ){
+                    dst[prop] = src[prop];
+                }}
+            }
+            return dst;
+        },
+        
+        isString: function(obj) {
+            return Object.prototype.toString.call(obj) === "[object String]";
+        },
+        
+        isFunction: function(obj) {
+            return Object.prototype.toString.call(obj) === "[object Function]";
+        },
+        
+        isObject: function(obj, considerFunction, considerNull) {
+            if( obj === null ) {
+                return !!considerNull;
+            } else if( Object.prototype.toString.call(obj) === '[object Function]' ) {
+                return typeof considerFunction==="undefined" ? true : !!considerFunction;
+            }
+            return typeof obj === 'object' || Object.prototype.toString.call(obj) === "[object RegExp]";
+        },
+        
+        isArray: function(obj){
+            return Array.isArray 
+                ? Array.isArray(obj) 
+                : Object.prototype.toString.call(obj) === "[object Array]";         
+        }
+    };
+    
+    /**
+     * Local name for main namespace object (%(namespace)s).
+     * Result object of FunctionSack factory
+     * @private
+     */
+    var $NS = {};
+    
+%(code)s
+
+    // Provide the library via environment-dependent method
+    (function(){
+        if (typeof define === "function" && typeof require === "function" && typeof require.onScriptLoad === "function") {
+            // RequireJS
+            define( $NS );
+        } else if( typeof require === "function" && typeof exports === "object" ) {
+            // CommonJS
+            __utils.mixin( exports, $NS );
+        } else if( typeof __FUNCTION_SACK_CONFIG__ === "object" && (__global || __FUNCTION_SACK_CONFIG__.context) ) {
+            // browser script tag, Rhino, SpiderMonkey, etc (with dedicated config object)
+            (function(config){
+                var ctx = config.context || __global;
+                if( __utils.isFunction(ctx) ) {
+                    return void ctx( $NS );
+                }
+                if( !!config.ignoreRootNamespace ) {
+                    return void __utils.mixin( ctx, $NS );
+                }
+                ctx[ __utils.isString(config.rootNamespaceName) ? config.rootNamespaceName : "%(namespace)s" ] = $NS;
+            })(__FUNCTION_SACK_CONFIG__);
+        } else if( __global ) {
+            // browser script tag, Rhino, SpiderMonkey, etc
+            __global.%(namespace)s = $NS;
+        } else {
+            // shouldn't take place unless someone plays with the code or with the context
+            throw new Error( "Unspecified FunctionSack load method" );
+        }
+    })();
+
+})(this);

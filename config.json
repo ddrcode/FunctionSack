@@ -1,0 +1,28 @@
+{
+
+    "version": "0.5.0beta",
+
+    "FILE_PREFIX":         "fns-",
+    "SRC_DIR":             "js",
+    "OUT_DIR":             "build",
+    "TEMPLATES_DIR":       "templates",
+    "MAIN_TEMPLATE_FILE":  "fns.jst",
+    "DEFAULT_NAMESPACE":   "fns",
+    
+
+    "modules": ["core", "type", "obj", "str", "dom", "bom", "ajax", "es5", "proto", "env"],
+    
+    "dependencies": {
+        "core": [],
+        "type": [],
+        "obj": ["type", "es5"],
+        "str": ["obj"],
+        "dom": [],
+        "bom": [],
+        "ajax": [],
+        "es5": [],
+        "proto": [],
+        "env": []
+    }
+    
+}

@@ -1,0 +1,32 @@
+
+Usage: jake COMMAND OPTIONS
+
+The file provides several options for building the output file based on input
+js. All output files will be saved in 'build' directory. Build system does not
+warn about overriding. See 'config.json' file to change standard configuration 
+options.  
+
+COMMANDS:
+   help                      displays this help and exit
+   buildall [file]           builds all modules to file specified by file option
+                             If option not provided file name will be taken from
+                             config.json file.
+   build file mod1 [mod2]    build a file with given modules. It does not check
+                             dependencies between modules! Any number of modules
+                             can be passed. File name doesn't have to have an
+                             extension (.js)
+   buildmod mod1 [mod2]      build module(s) to separate files. This option 
+                             considers dependencies (see examples below).
+   modules                   displays available module names
+   dependencies              displays modules and dependencies between them
+   
+EXAMPLES:
+jake buildall - creates complete build file
+jake build fns-obj-full core type obj - creates fns-obj-full.js file from 
+                             modules 'core', 'type' and 'obj'
+jake buildmod obj type       creates two files: a) 'fns-obj-full.js' from 
+                             modules 'obj', 'type' and 'es5' (due to the depen-
+                             dencies declared in config.json file).
+                             b) 'fns-type-full.js' file from 'type' module
+                             (no additional dependencies declared)
+
