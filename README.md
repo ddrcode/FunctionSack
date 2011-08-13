@@ -20,6 +20,8 @@ JavaScript files can't be used directly - they must be built with
 modules (ie. core, txt, type). You can build multiple or just a single JS file
 into a single output file. Build options:
 
+* before you do your first build - create ```build``` directory in the project
+  dir. All build output will be saved there. 
 * ```jake help``` - displays build options
 * ```jake modules``` - lists the names of existing modules
 * ```jake buildall``` - builds all modules to a single file (build/fnsack-full.js).
