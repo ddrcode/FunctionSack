@@ -20,16 +20,16 @@ JavaScript files can't be used directly - they must be built with
 modules (ie. core, txt, type). You can build multiple or just a single JS file
 into a single output file. Build options:
 
-* {{{jake help}}} - displays build options
-* {{{jake modules}}} - lists the names of existing modules
-* {{{jake buildall}}} - builds all modules to a single file (build/fnsack-full.js).
+* ```jake help``` - displays build options
+* ```jake modules``` - lists the names of existing modules
+* ```jake buildall``` - builds all modules to a single file (build/fnsack-full.js).
   It can be parametrized with file name. (However the 'build' directory can't
   be changed in current version).
-* {{{jake buildmod <modname>}}} - builds a single module; build system recognizes
+* ```jake buildmod <modname>``` - builds a single module; build system recognizes
   here dependencies between modules and it builds the output file including them. 
   So ie the 'obj' module will be built together with obj and type modules. When
   more than one module name passed, build system will produce multiple files.
-* {{{jake build <file> <modules>}}} - builds coustom file with selected modules.
+* ```jake build <file> <modules>``` - builds coustom file with selected modules.
   This option does not consider module dependencies and creates an output file
   based on provided module names. The output file does not require extension. 
   
