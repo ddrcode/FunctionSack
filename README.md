@@ -41,14 +41,18 @@ into a single output file. Build options:
 All source files contains documentation in 
 [JSDocs](http://code.google.com/p/jsdoc-toolkit/) format. To generate the 
 documentation follow the instruction below:
-* create a 'doc' directory in project folder
+
+* create a ```doc``` directory in project folder
 * install [jsdoc-toolkit](http://code.google.com/p/jsdoc-toolkit/)
 * build FunctionSack with ```jake buildall``` instruction (see description above)
-* Generate JSDOcs with instruction:
-  ```java -jar jsrun.jar app/run.js -a -D="noGlobal:true" -D="title:FunctionSack" 
-        -t=./build-files/jsdoc-template -d=./doc -n build/fnsack-full.js```
-  Please note
-** jsrun.jar and app/run.js are files from jsdoc-toolkit; full path may be required
-** -t paramater requires sometimes a full path instead of the local path
+* Generate JSDocs with instruction:
+
+  ```
+java -jar jsrun.jar app/run.js -a -D="noGlobal:true" -D="title:FunctionSack" 
+     -t=./build-files/jsdoc-template -d=./doc -n build/fnsack-full.js
+  ```
+*  Please note
+  * ```jsrun.jar``` and ```app/run.js``` files come from jsdoc-toolkit, so provide the right path
+  * -t paramater requires a full path to the JSDoc template instead of the local path
 * Information: JSDocs generator uses page template located in 'build-files/jsdoc-template'
   directory. The template base on [Codeview Template](http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/)
