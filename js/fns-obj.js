@@ -331,7 +331,7 @@ $NS.obj = (function(){
          * @returns {Object}
          */
         safeMixin: function(dst){
-            var src, prop;
+            var src = null, prop = null;
             for(var srcId=1, len=arguments.length; srcId < len; ++srcId) {
                 for(prop in (src=arguments[srcId])) { 
                     if( src.hasOwnProperty(prop) && !dst.hasOwnProperty(prop) ){
