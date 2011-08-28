@@ -195,7 +195,25 @@ $NS.str = (function(){
          */
         contains: function(str, searchStr) {
             return String(str).indexOf(searchStr) >= 0;
-        }
+        },
+        
+        
+        /**
+         * Makes a string camel-case
+         * @name $NS.str.camelize
+         * @info Makes a string camel case
+         * @function
+         * @param {string} str A string
+         * @returns {string} camelized string
+         * @example $NS.str.camelize('this-is_a_test') === 'thisIsATest';
+         */
+        camelize: (function(){
+            var __pattern = /[_\-][a-z]/g,
+                __camelizer = function(x){ return x.charAt(1).toUpperCase(); };
+            return function(str) {
+                return String(str).replace( __pattern, __camelizer ); 
+            };
+        })()
         
         //###
         

@@ -1,6 +1,22 @@
 module( "fns.str module" );
 
 
+test( "Function: fns.str.camelize", 10, function(){
+    
+    strictEqual( typeof fns.str.camelize, "function", "Function existence verification" );
+    strictEqual( fns.str.camelize(""), "" );
+    strictEqual( fns.str.camelize("abc"), "abc" );
+    strictEqual( fns.str.camelize("a-test"), "aTest" );
+    strictEqual( fns.str.camelize("a_test"), "aTest" );
+    strictEqual( fns.str.camelize("_test"), "Test" );
+    strictEqual( fns.str.camelize(123), "123" );
+    strictEqual( fns.str.camelize("abc--test"), "abc-Test" );
+    strictEqual( fns.str.camelize(null), "null" );
+    strictEqual( fns.str.camelize(), "undefined" );
+});
+
+
+
 test( "Function: fns.str.contains", 13, function(){
     
     strictEqual( typeof fns.str.contains, "function", "Function existence verification" );
