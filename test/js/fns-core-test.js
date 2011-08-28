@@ -24,30 +24,39 @@ test( "fns.mixin", 9, function(){
 });
 
 
-test( "fns.toArray", 15, function(){
+test( "fns.toArray", 19, function(){
 
 	equals( typeof fns.toArray, "function", "Function existence verification" );
 	
 	// conversion test
 	equals( typeof fns.toArray(arguments), "object" ); //2
-	var arr = fns.toArray("abcdef");
+	var arr = (function(){ return fns.toArray(arguments); })("a","b","c","d","e","f");
 	equals( arr[2], 'c' );
 	equals( Object.prototype.toString.call(arr), '[object Array]' );
 	equals( arr.length, 6 );
+	
 	arr = fns.toArray( document.body.childNodes );
 	equals( arr.length, document.body.childNodes.length ); // 6
-	notEqual( typeof arr[0], "undefined" );
+	ok( typeof arr[0] !== "undefined" );
 	equals( arr[0], document.body.childNodes[0] );
+	
 	arr = fns.toArray( {a:1, b:"test"} );
-	equals( arr.length, 0 ); // 9
+	equals( arr.length, 1 ); // 9
+	equals( typeof arr[0], "object" );
+	
 	arr = fns.toArray( 42 );
-	equals( arr.length, 0 );	
+	equals( arr.length, 1 );	
+	equals( typeof arr[0], "number" );
 	
 	// parameters test
 	arr = fns.toArray( "abcdef", 2 );
+	equals( arr.length, 0 );
+	arr = fns.toArray( "abcdef", 0,2 );
+	equals( arr.length, 1 );
+	arr = (function(){ return fns.toArray(arguments, 2); })("a","b","c","d","e","f");
 	equals( arr.join(""), "cdef" );
-	arr = fns.toArray( "abcdef", 1,3 );
-	equals( arr.join(""), "bc" );
+    arr = (function(){ return fns.toArray(arguments, 1, 3); })("a","b","c","d","e","f");
+    equals( arr.join(""), "bc" );
 	
 	// object test
 	arr = fns.toArray({ length: 10 });
@@ -76,7 +85,7 @@ test( "fns.bind", 6, function(){
 	ok( fun2() === "out", "fun2 with param" );
 
 	raises(
-			function(){obj.msg.bind.call(new Object())},
+			function(){obj.msg.bind.call(new Object());},
 			TypeError, "obj.msg.bind.call(new Object()) should throw an error" );	
 } );
 

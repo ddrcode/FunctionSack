@@ -30,33 +30,38 @@
 			toArray: (function(){
 				if( Array.prototype.slice.call("a")[0] === "a" && [1].slice(void 0, void 0).length === 1 ){
 					// modern browsers
-					return function(obj, idxFrom, idxTo){
-						return Array.prototype.slice.call(obj, idxFrom, idxTo);
-					};
+                    return function(obj, idxFrom, idxTo){
+                        if( obj == null ) {
+                            return [];
+                        }
+                        return !__utils.isString(obj) && 'length' in Object(obj) 
+                                ? Array.prototype.slice.call(obj, idxFrom, idxTo)
+                                : [obj].slice(idxFrom, idxTo);
+                    };
 				}
 				
-				// older browsers
-				return function(obj, idxFrom, idxTo){
-					var args = []; 
-					arguments[1] && args.push(arguments[1]) && arguments[2] && args.push(arguments[2]);
-					if( Object.prototype.toString.call(obj) === "[object String]" ) {
-						return Array.prototype.slice.apply(obj.split(""), args);
-					}
-					try {
-						return Array.prototype.slice.apply(obj, args);
-					} catch(ex) {
-						if( typeof obj.length === 'number' ) {
-							var len = obj.length;
-							var arr = new Array( len );
-							len = args[1] || len;
-							for( var i=args[0] || 0; i < len; ++i ) {
-								arr[i] = obj[i];
-							}
-							return arr;
-						}
-						return [];
-					}
-				};
+				// older environments
+                return function(obj, idxFrom, idxTo){
+                    var args = []; 
+                    arguments[1] && args.push(arguments[1]) && arguments[2] && args.push(arguments[2]);
+                    if( obj == null ) { // obj or undefined
+                        return [];
+                    }
+                    if( __utils.isString(obj) || !('length' in Object(obj)) ) {
+                        obj = [obj];
+                    }
+                    try {
+                        return Array.prototype.slice.apply(obj, args);
+                    } catch(ex) {
+                        var len = obj.length;
+                        var arr = new Array( len );
+                        len = args[1] || len;
+                        for( var i=args[0] || 0; i < len; ++i ) {
+                            arr[i] = obj[i];
+                        }
+                        return arr;
+                    }
+                };
 			})(),
 
 			
