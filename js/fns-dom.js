@@ -1,4 +1,10 @@
 /**
+ * The module initialization exits silently when DOM not recognized
+ * (no functions will be created in such case). Thanks to it the
+ * module can be loaded to non-DOM environments like Rhino or Node.
+ * However if it is planned to be used together with DOM emulators
+ * like JS-DOM or EnvJS - the emulators must be loaded before
+ * FunctionSack. 
  * @name %(namespace)s.dom
  * @namespace Essential DOM and events manipulation
  * @static
@@ -370,39 +376,105 @@ $NS.dom = (function(){
         
         
         /**
+         * Get/set CSS style attribute
+         * @name $NS.dom.style
+         * @info get/set CSS style attribute
+         * @requires $NS.str.camelize
+         * @requires $NS.toArray
+         * @function
+         * 
+         * @param {Element|string|Array} elem DOM element or its ID (or an array of elements or IDs)
+         * @param {string|Object} propertyName A name of style property
+         * @param {string} [value] A value of style property
+         * @returns {string|Array}
+         * 
+         * @example var bgcolor = $NS.dom.style("menu","background-color");
+         * @example $NS.dom.style(myMenu, "display", "none");
+         */
+        style: function(elems, propertyName, value){
+            elems = $NS.toArray(elems);
+            var results = new Array( elems.length ),
+                isObj = __utils.isObject(arguments[1]),
+                i = null;
+            
+            if( isObj ) {
+                var obj = {};
+                for( i in propertyName ) { if(propertyName.hasOwnProperty(i)) {
+                    obj[ $NS.str.camelize(i) ] = propertyName[i];
+                }}
+                propertyName = obj;
+            } else {
+                propertyName = $NS.str.camelize( propertyName );
+            }
+            
+            for( var i=0, len=elems.length; i < len; ++i ) {
+                var elem = __elem( elems[i] );
+                if( isObj) {
+                    __utils.mixin(elem.style, arguments[1]);
+                    results[i] = arguments[1];
+                } else {
+                    results[i] = ( arguments.length < 3
+                            ? elem.style[propertyName]
+                            : (elem.style[propertyName] = value) );
+                }
+            }
+            return results.length === 1 ? results[0] : results;
+        },
+        
+        
+        /**
          * Adds given function as a listener to a DOM element
          * @name $NS.dom.addListener
+         * @requires $NS.toArray 
          * @info Adds given function as a listener to a DOM element
          * @function
-         * @param {Element|string} elem DOM Element or its ID. 
+         * @see $NS.dom.listenOnce
+         * 
+         * @param {Element|string|Array} elem DOM Element or its ID. 
          * @param {string} eventName Name of an event without "on" prefix (eg. "click") 
          * @param {function} handler Event listener function
          * @param {boolean} [capturing=false] enables capturing phase
-         * @returns {function} Event listener 
+         * @returns {function} Event listener; in most of the cases result is equal to 'handler'
+         *          attribute, although on older IE versions (where only attachEvent is available),
+         *          the handler must be wrapped with another function. addListener returns the real
+         *          event listener in this case.
+         *          
+         * @example $NS.dom.addListener('menu', 'click', function(event){ ... });
+         * @example $NS.dom.addListener(document.getElementsByTagName('input'),'blur',validator);
          */
         addListener: (function() {
             if( window.addEventListener ) {
-                return function(elem, eventName, handler, capturing) {
-                    elem = __elem(elem);
-                    elem.addEventListener(eventName, handler, !!capturing);
+                return function(elems, eventName, handler, capturing) {
+                    elems = $NS.toArray(elems);
+                    for(var i=0, len=elems.length; i < len; ++i){
+                        var elem = __elem(elems[i]);
+                        elem.addEventListener(eventName, handler, !!capturing);
+                    }
                     return handler;
                 };
             }
                 
             // TODO stop propagation and capturing
             if( window.attachEvent ) {
-                return function(elem, eventName, handler) {
-                    elem = __elem(elem);
-                    elem.attachEvent( "on"+eventName, function fh(){
+                return function(elems, eventName, handler) {
+                    elems = $NS.toArray(elems);
+                    var ieHandler = function(){
                         handler.call( window.event.srcElement, window.event );
-                    });
-                    return fh;
+                    };
+                    for(var i=0, len=elems.length; i < len; ++i){
+                        elem = __elem(elems[i]);
+                        elem.attachEvent( "on"+eventName, ieHandler );
+                    }
+                    return ieHandler;
                 };
             }
                 
-            return function(elem, eventName, handler) {
-                elem = __elem(elem);
-                elem[ "on"+eventName ] = handler;
+            return function(elems, eventName, handler) {
+                elems = $NS.toArray(elems);
+                for(var i=0, len=elems.length; i < len; ++i){
+                    var elem = __elem(elems[i]);
+                    elem[ "on"+eventName ] = handler;
+                }
                 return handler;
             };
         })(),
@@ -414,20 +486,27 @@ $NS.dom = (function(){
          * @name $NS.dom.listenOnce
          * @info Adds listener for one time execution.
          * @requires $NS.dom.addListener
+         * @requires $NS.toArray
+         * @requires $NS.bind
          * @function
-         * @param {Element|string} elem DOM Element or its ID. 
+         * @see $NS.dom.addListener
+         * 
+         * @param {Element|string|Array} elem DOM Element or its ID or array of them. 
          * @param {string} eventName Name of an event without "on" prefix (eg. "click") 
          * @param {function} handler Event listener function
          * @param {boolean} [capturing=false] enables capturing phase
          * @returns {function} Event listener
          */
-        listenOnce: function(elem, eventName, handler, capturing){
-            elem = __elem(elem);
-            var fh = function(event){
-                    handler.call(elem, event);
-                    $NS.dom.removeListener(elem, eventName, fh, capturing);
+        listenOnce: function(elems, eventName, handler, capturing){
+            elems = $NS.toArray(elems);
+            function fh(event){
+                    handler.call(this, event);
+                    $NS.dom.removeListener(this, eventName, fh, capturing);
                 };
-            this.addListener(elem, eventName, fh);
+            for(var i=0, len=elems.length; i < len; ++i){
+                var elem = __elem(elems[i]);
+                this.addListener(elem, eventName, fh.bind(elem), capturing);
+            }
             return fh;
         },
         
@@ -487,7 +566,7 @@ $NS.dom = (function(){
                     throw new Error("Event dispatching is not supported");
                 };
             }
-        })()                    
+        })()
     
         //###
     

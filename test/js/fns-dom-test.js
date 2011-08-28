@@ -6,7 +6,7 @@ test('Function: byId', 6, function() {
 	ok( fns.dom.byId('test'), "can access 'test' element" );
 	ok( fns.dom.byId('test').innerHTML, "'test' element is a node" );
 	equals( fns.dom.byId('test2'), null, "function invocation with non-existing id" );
-    dom = fns.dom.byId("test", "testRemove");
+    var dom = fns.dom.byId("test", "testRemove");
     ok( Object.prototype.toString.call(dom) === "[object Array]" );
     ok( dom.length === 2 );
     ok( dom[0] === fns.dom.byId("test") );	
@@ -16,7 +16,7 @@ test('Function: byId', 6, function() {
 test('Function: create', 4, function() {
 	var $ = fns.dom.byId;
 	var dom =  fns.dom.create('br');
-	$('test').appendChild(dom)
+	$('test').appendChild(dom);
 	ok( $('test').innerHTML.match(/\<br/i), 'can create br tag with 1-argument create function' );
 	
 	dom = fns.dom.create('input', {id: 'test-input', type: 'button', value: 'Test'} );
@@ -162,4 +162,14 @@ test('Function: addEvent/removeEvent', function() {
 	fns.dom.removeListener(input,'click', handler );
 	jQuery(input).trigger( 'click' );
 	ok( executionCount === 1, "Event handler removed from 'test-input' element (node version)" );
+});
+
+
+test('Function: style', function(){
+    ok( typeof fns.dom.style === 'function' );
+    fns.dom.style('test','backgroundColor','red');
+    strictEqual(document.getElementById('test').style.backgroundColor, 'red');
+    strictEqual(fns.dom.style('test', 'backgroundColor'), 'red');
+    strictEqual(fns.dom.style(document.getElementById('test'), 'backgroundColor'), 'red');
+    strictEqual(fns.dom.style('test', 'background-color'), 'red');
 });
