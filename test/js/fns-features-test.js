@@ -9,7 +9,7 @@ function notRaises(block, message) {
 		isOK = false;
 	}
 	ok(isOK, message);
-	return isOK
+	return isOK;
 }
 
 test("Features required for core.toArray", 6, function(){
@@ -31,7 +31,7 @@ test("Features required for core.toArray", 6, function(){
 	
 	try {
 		arr = Array.prototype.slice.call({x:1});
-		expect(9)
+		expect(9);
 		ok( true, "Array.prototype.slice.call({x:1}) does not raise error" );
 		equals( Object.prototype.toString.call(arr), "[object Array]", "typeof Array.prototype.slice.call({})" );
 	} catch(ex) {
@@ -66,7 +66,7 @@ test("Features required for __notEnumerableProperties (from es5)", 2, function()
 test("Browser detection", 3, function(){
 	equals( typeof window.propertyIsEnumerable, "function", "typeof window.propertyIsEnumerable==='function' should fail on IE" );
 	equals( typeof window.hasOwnProperty, "function", "typeof window.hasOwnProperty==='function' should fail on IE" );
-	equals( Object.prototype.toString.call(window), "[object Window]", "Object.prototype.toString.call(document) === '[object Window]'" )
+	equals( Object.prototype.toString.call(window), "[object Window]", "Object.prototype.toString.call(document) === '[object Window]'" );
 });
 
 
