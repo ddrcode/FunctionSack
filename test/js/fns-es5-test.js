@@ -121,7 +121,7 @@ test( "Function.prototype.bind", function(){
 	ok( fun2() === "out", "fun2 with no param" );
 	ok( fun2() === "out", "fun2 with param" );
 
-	ok( utils.assertError(function(){obj.msg.bind.call(new Object())}), "obj.msg.bind.call(new Object()) should throw an error" );
+	ok( utils.assertError(function(){obj.msg.bind.call(new Object());}), "obj.msg.bind.call(new Object()) should throw an error" );
 	
 });
 
@@ -188,7 +188,7 @@ test( "Object.isSealed", function(){
 	if( Object.seal ) {
 		ok( Object.isSealed(Object.seal({})) === true, "Object.isSealed(Object.seal({})) === true" );
 	}
-	ok( utils.assertError(function(){Object.isSealed(123)}), "Object.isSealed with non-object argument should throw TypeError" );
+	ok( utils.assertError(function(){Object.isSealed(123);}), "Object.isSealed with non-object argument should throw TypeError" );
 	
 });
 
@@ -200,7 +200,7 @@ test( "Object.isFrozen", function(){
 	if( Object.freeze ) {
 		ok( Object.isFrozen(Object.freeze({})) === true, "Object.isFrozen(Object.freeze({})) === true" );
 	}	
-	ok( utils.assertError(function(){Object.isFrozen(123)}), "Object.isFrozen with non-object argument should throw TypeError" );
+	ok( utils.assertError(function(){Object.isFrozen(123);}), "Object.isFrozen with non-object argument should throw TypeError" );
 	
 });
 
@@ -212,7 +212,7 @@ test( "Object.isExtensible", function(){
 	if( Object.seal ) {
 		ok( Object.isExtensible(Object.seal({})) === false, "Object.isExtensible(Object.seal({})) === false" );
 	}	
-	ok( utils.assertError(function(){Object.isExtensible(123)}), "Object.isFrozen with non-object argument should throw TypeError" );
+	ok( utils.assertError(function(){Object.isExtensible(123);}), "Object.isFrozen with non-object argument should throw TypeError" );
 	
 });
 

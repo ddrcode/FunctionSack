@@ -60,13 +60,6 @@
         return typeof obj === "function";
     };
     
-    
-    /**
-     * @private
-     */
-    var $AP = Array.prototype;
-    
-    
   
     /**
      * Safe equivalent of Object.prototype.propertyIsEnumerable. The original method 
@@ -326,11 +319,11 @@
      * @example var flatFunction = obj.method.bind(obj);
      */
     Function.prototype.bind || (Function.prototype.bind = function(ctx){
-        if( !__utils.isFunction(this) ) {
+        if( typeof  this !== 'function' ) {
             throw new TypeError( "'this' is not a function" );
         }
         var fn = this, 
-            args = $AP.slice.call(arguments,1);
+            args = Array.prototype.slice.call(arguments,1);
             
         return function() {
             return fn.apply( ctx, args.concat(Array.prototype.slice.call(arguments)) );
@@ -1052,7 +1045,7 @@
             throw new TypeError( obj+" is not an object" );
         }
         
-        var properties = Object( properties );
+        properties = Object( properties );
         var descriptors = {};
         for( var key in properties ) {
             if( properties.hasOwnProperty(key) ){
