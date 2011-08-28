@@ -65,6 +65,25 @@ test('Function: fns.type.isArray', 6, function() {
 
 
 
+test('Function: fns.type.isBasic', 12, function() {
+    equals( typeof fns.type.isBasic, "function" );
+    
+    equals( fns.type.isBasic(1), true );
+    equals( fns.type.isBasic(new Number(1)), true );
+    equals( fns.type.isBasic(false), true );
+    equals( fns.type.isBasic(new Boolean(true)), true );
+    equals( fns.type.isBasic("a"), true );
+    equals( fns.type.isBasic(new String("a")), true );
+    
+    equals( fns.type.isBasic(), false );
+    equals( fns.type.isBasic(null), false );
+    equals( fns.type.isBasic([]), false );
+    equals( fns.type.isBasic({}), false );
+    equals( fns.type.isBasic(/.+/), false );
+});
+
+
+
 test('Function: fns.type.isBoolean', 6, function() {
     equals( typeof fns.type.isBoolean, "function" );
     equals( fns.type.isBoolean(false), true );

@@ -68,6 +68,11 @@
             return Array.isArray 
                 ? Array.isArray(obj) 
                 : Object.prototype.toString.call(obj) === "[object Array]";         
+        },
+        
+        isBasic: function(obj){
+        	return '[object String][object Number][object Boolean]'
+        			.indexOf( Object.prototype.toString.call(obj) ) >= 0;
         }
     };
     

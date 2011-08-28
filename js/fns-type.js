@@ -421,7 +421,21 @@ $NS.type = (function(){
             var c;
             return __utils.isObject(obj,false) 
                         && ((c=this.getClassName(obj)) === "String" || c === "Number" || c === "Boolean");
-        }
+        },
+        
+        
+        /**
+         * Checks if given object is a basic type (number, string, boolean) or its wrapper
+         * @name $NS.type.isBasic
+         * @info Checks if given object is a basic type (number, string, boolean)
+         * @function
+         * @param {*} obj Object to check
+         * @returns {boolean} 
+         * @example $NS.type.isBasic(3) === true;
+         * @example $NS.type.isBasic(new Number(3)) === true;
+         * @example $NS.type.isBasic({}) === false; 
+         */
+        isBasic: __utils.isBasic
         
         //###
     };
