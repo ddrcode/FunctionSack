@@ -95,7 +95,7 @@ $NS.type = (function(){
          * it might be implementation-dependent. In example DOM objects in Firefox browser
          * provide custom values of Class properties, so getClass(document) will return "HTMLDocument". 
          * The same example on Internet Explorer will return "Object". 
-         * To get constructor name instead of "Object" for custom types use getName function instead.
+         * To get constructor name instead of "Object" for custom types use getConstructorName function instead.
          * 
          * @name $NS.type.getClassName
          * @info Returns value of the [[Class]] internal property of an object
@@ -146,13 +146,13 @@ $NS.type = (function(){
          *                     won't be able to recognize the constructor name.
          * @returns {string} type name
          * 
-         * @example $NS.type.getName(123) === "number"
-         * @example $NS.type.getName(new Number(1)) === "Number"
-         * @example $NS.type.getName([]} === "Array" 
-         * @example $NS.type.getName(function(){}) === "function"
-         * @example $NS.type.getName(/.+/) === "RegExp"
-         * @example $NS.type.getName(null) === "null"
-         * @example $NS.type.getName() === "undefined"
+         * @example $NS.type.getConstructorName(123) === "number"
+         * @example $NS.type.getConstructorName(new Number(1)) === "Number"
+         * @example $NS.type.getConstructorName([]} === "Array" 
+         * @example $NS.type.getConstructorName(function(){}) === "function"
+         * @example $NS.type.getConstructorName(/.+/) === "RegExp"
+         * @example $NS.type.getConstructorName(null) === "null"
+         * @example $NS.type.getConstructorName() === "undefined"
          */
         getConstructorName: function(obj, unrecognizedConstructorName) {
             if( obj === null ) {
@@ -189,13 +189,13 @@ $NS.type = (function(){
  
         
         /**
-         * Check weather passed parameter is a function.
+         * Check whether passed parameter is a function.
          * Usage of this method is more secure than typeof operator, because in some
          * environments (like Google Chrome / V8), typeof can return "function" value also
          * for non-function arguments, like regular expressions
          * 
          * @name $NS.type.isFunction
-         * @info Check weather passed parameter is a function.
+         * @info Check whether passed parameter is a function.
          * @nosideeffects
          * @function
          *  
